@@ -27,20 +27,23 @@ execute() {
     "$@"
 }
 
+
 log "--------- dev-env ---------"
-# for an entire dir
+# for an entire dir removes old, puts new
 cd $script_dir
 copy_dir() {
     pushd $1
     to=$2
     dirs=$(find . -maxdepth 1 -mindepth 1 -type d)
+    log "Directories found in $1: $dirs"
     for dir in $dirs; do
-        # execute rm -rf $to/$dir
+        execute rm -rf $to/$dir
         execute cp -r $dir $to/$dir
     done
     popd
 }
-# copy_dir .config $NVIM_CONFIG
+copy_dir ./nvim_config ~/.config/
+copy_dir ./tmux ~/.local
 
 # for one single file
 copy_file() {
@@ -51,6 +54,6 @@ copy_file() {
     execute cp $from $to/$name
 }
 
-# copy_file .bashrc ~
-copy_file .tmux.conf ~
-# copy_file .vimrc ~
+# copy_file ./config/.bashrc ~
+copy_file ./config/.tmux.conf ~
+# copy_file ./config/.vimrc ~
