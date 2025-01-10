@@ -1,0 +1,52 @@
+#!/usr/bin/env bash
+# Runs all scripts in the ./runs directory that contain the $filter string
+
+script_dir="$( cd "$( dirname "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )"
+# script_dir="$(dirname "${BASH_SOURCE[0]}")"
+echo "$script_dir"
+
+filter=""
+dry="0"
+
+while [[ $# > 0 ]]; do
+	if [[ $1 == "--dry" ]]; then
+		dry="1"
+	else
+		filter="$1"
+	fi
+	shift # shifts all the arguments one position
+done
+
+execute() {
+	log "execute $@"
+	if [[ $dry == "1" ]]; then
+		return
+	fi
+
+	"$@" #Executes everything (ASK AI ANYWAY)
+}
+log() {
+	if [[ $dry == "1" ]]; then
+		echo  "[DRY_RUN}: $@"
+	else
+		echo "$@"
+	fi
+}
+
+log "Run: dir $script_dir -- filter \"$filter\""
+# mindepth 1 excludes current and upper directories
+# maxdepth 1 excludes subdirectories
+# executable excludes directories
+# -type f excludes directories
+cd $script_dir
+scripts=$(find ./runs -maxdepth 1 -mindepth 1 -executable -type f)
+
+for script in $scripts; do
+	if log "$script" | grep -qv "$filter"; then # q means quiet (not printing anything) v means invert match
+		echo "filtering $script" # Logs the scripts ignored
+		continue
+	fi
+
+	execute ./$script
+done
+ 

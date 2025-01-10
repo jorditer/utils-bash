@@ -1,0 +1,7 @@
+#!/usr/bin/env bash 
+
+# gsettings get org.gnome.shell.keybindings switch-to-application-3
+gsettings set org.gnome.shell.keybindings switch-to-application-1 "['<Super>j']"
+gsettings set org.gnome.shell.keybindings switch-to-application-2 "['<Super>k']"
+gsettings set org.gnome.shell.keybindings switch-to-application-3 "['<Super>l']"
+
