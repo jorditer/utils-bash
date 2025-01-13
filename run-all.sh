@@ -1,21 +1,14 @@
 #!/bin/bash
 
-trap "kill 0" EXIT
+# Writes npm run dev in current space
+npm run dev
 
-# Start all processes in parallel
-echo "Starting React Vite Project with Tailwind and Express..."
-echo "Starting Express backend..."
-npm run dev &
+# Split the tmux window horizontally
+tmux split-window -h
 
-echo "Starting Tailwind CSS watcher..."
-npm run tailwind &
+# Run npm run dev in the new pane
+tmux send-keys -t {right} "npm run vite" Enter
 
-echo "Starting Vite frontend server..."
-npm run vite &
+tmux split-window -v
+tmux send-keys "npm run tailwind" Enter
 
-npm run dev &
-npm run tailwind &
-npm run vite &
-
-# Wait for all processes to finish
-wait
