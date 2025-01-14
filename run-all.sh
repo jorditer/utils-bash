@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Writes npm run dev in current space
-npm run dev
+tmux send-keys "npm run dev" Enter
 
 # Split the tmux window horizontally
 tmux split-window -h
